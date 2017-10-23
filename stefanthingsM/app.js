@@ -2,13 +2,30 @@ var express = require('express');
 var app = express();
 var serv = require('http').Server(app);
 var io = require('socket.io')(serv,{});
+var bodyParser = require('body-parser');
 //debugging flag
 var DEBUG = true;
  
+ 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use('/client',express.static(__dirname + '/client'));
+/*
 app.get('/',function(req, res) {
     res.sendFile(__dirname + '/client/index.html');
 });
-app.use('/client',express.static(__dirname + '/client'));
+*/
+
+app.get('/',function(req, res) {
+    res.sendFile(__dirname + '/client/signin.html');
+});
+
+app.post('/signIn',function(req, res) {
+    res.sendFile(__dirname + '/client/index.html');
+	console.log(req.body);
+});
+
+
  
 serv.listen(3001);
 console.log('listening on port 3001');
