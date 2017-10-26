@@ -3,13 +3,16 @@ var app = express();
 var serv = require('http').Server(app);
 var io = require('socket.io')(serv,{});
 var bodyParser = require('body-parser');
+
 //debugging flag
 var DEBUG = true;
  
- 
+//middleware setup 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/client',express.static(__dirname + '/client'));
+
+
 /*
 app.get('/',function(req, res) {
     res.sendFile(__dirname + '/client/index.html');
@@ -21,7 +24,10 @@ app.get('/',function(req, res) {
 });
 
 app.post('/signIn',function(req, res) {
-    res.sendFile(__dirname + '/client/index.html');
+    if (req.body.username == "abc" && req.body.password == "abc")
+		res.sendFile(__dirname + '/client/index.html');
+	else
+		res.sendFile(__dirname + '/client/signinfail.html');
 	console.log(req.body);
 });
 
