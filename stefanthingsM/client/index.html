@@ -1,8 +1,9 @@
 <html>
 	<head>
-    <title>gameM</title>
-  </head>
-  <body>
+		<title>gameM</title>
+		<script src="/socket.io/socket.io.js"></script>
+	</head>
+	<body>
 		<canvas id="ctx" width="500" height="500" style="border:1px solid #000000;"></canvas>
 		<div id="chat-text" style="width:500px;height:100px;overflow-y:scroll">
 			<div>Hello!</div>
@@ -15,10 +16,10 @@
 		<br>
 		<br>
 		<!--<button onclick="myFunction()">Send</button>-->
-  </body>
+	</body>
 </html>
 
-<script src="/socket.io/socket.io.js"></script>
+
 <!--<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>-->
 
 <script>
@@ -29,6 +30,10 @@
     ctx.font = '30px Arial';
    
     var socket = io();
+	
+	var Img = {};
+	Img.bullet = new Image();
+	Img.bullet.src = "client/img/bullet.png";
       
 	/*/button click function attempt
 	myFunction = function(){
@@ -124,11 +129,12 @@
         ctx.clearRect(0,0,500,500);
         for(var i = 0 ; i < data.player.length; i++){
 			ctx.fillText(data.player[i].number,data.player[i].x,data.player[i].y);
-			//ctx.fillText('P', Math.random()*500, Math.random()*500);
+			////ctx.fillText('P', Math.random()*500, Math.random()*500);
 		}
         for(var i = 0 ; i < data.bullet.length; i++){
-			ctx.fillRect(data.bullet[i].x-5,data.bullet[i].y-5,10,10);
-			//ctx.fillText('P', Math.random()*500, Math.random()*500);
+			//ctx.fillRect(data.bullet[i].x-5,data.bullet[i].y-5,10,10);
+			////ctx.fillText('P', Math.random()*500, Math.random()*500);
+			ctx.drawImage(Img.bullet, 0,0, Img.bullet.width, Img.bullet.height, data.bullet[i].x-5, data.bullet[i].y-5, 10, 10);
 		}
     });
 	

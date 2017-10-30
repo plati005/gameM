@@ -3,6 +3,7 @@ var app = express();
 var serv = require('http').Server(app);
 var io = require('socket.io')(serv,{});
 var bodyParser = require('body-parser');
+var routes = require('./routes');
 
 //debugging flag
 var DEBUG = true;
@@ -11,35 +12,21 @@ var DEBUG = true;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/client',express.static(__dirname + '/client'));
+app.use('/', routes);
 
-
-/*
-app.get('/',function(req, res) {
-    res.sendFile(__dirname + '/client/index.html');
-});
-*/
-
-app.get('/',function(req, res) {
-    res.sendFile(__dirname + '/client/signin.html');
+//port
+app.set('port', (process.env.PORT || 3001)); 
+serv.listen(app.get('port'), function(){
+	console.log('listening on port '+app.get('port'));
 });
 
-app.post('/signIn',function(req, res) {
-    if (req.body.username == "abc" && req.body.password == "abc")
-		res.sendFile(__dirname + '/client/index.html');
-	else
-		res.sendFile(__dirname + '/client/signinfail.html');
-	console.log(req.body);
-});
-
-
- 
-serv.listen(3001);
-console.log('listening on port 3001');
 
 //socket list and player list with socket ids
 var SOCKET_LIST = {};
 
 
+
+//physics function
 testCollisionRectRect = function(rect1,rect2){
 	return rect1.x <= rect2.x+rect2.width
 		&& rect2.x <= rect1.x+rect1.width
