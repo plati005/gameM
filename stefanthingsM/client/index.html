@@ -23,27 +23,14 @@
 <!--<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>-->
 
 <script>
+	var socket = io();
+	
+	//chat
 	var chatText = document.getElementById("chat-text");
 	var chatInput = document.getElementById("chat-input");
 	var chatForm = document.getElementById("chat-form");
-    var ctx = document.getElementById("ctx").getContext("2d");
-    ctx.font = '30px Arial';
-   
-    var socket = io();
-	
-	var Img = {};
-	Img.bullet = new Image();
-	Img.bullet.src = "client/img/bullet.png";
-      
-	/*/button click function attempt
-	myFunction = function(){
-		console.log('chatted');
-		socket.emit('chat message', 'chatted');
-		//ctx.clearRect(0,0,500,500);
-		//ctx.fillText('P', Math.random()*500, Math.random()*500);
-	}//*/ 
-	
-	//chat via form submit (enter)
+       
+	//chat submit via form submit (enter)
 	chatForm.onsubmit = function(e){
         e.preventDefault();
         if(chatInput.value[0] === '/')
@@ -52,7 +39,6 @@
             socket.emit('sendMsgToServer',chatInput.value);
         chatInput.value = '';      
     }
-	
 	socket.on('addToChat', function(data){
 		console.log(data);
 		chatText.innerHTML+='<div>' + data + '</div>';
@@ -62,6 +48,38 @@
         console.log(data);
     });
 	
+	
+    //game
+	var ctx = document.getElementById("ctx").getContext("2d");
+    ctx.font = '30px Arial';
+	
+	var Img = {};
+	Img.bullet = new Image();
+	Img.bullet.src = "client/img/bullet.png";
+	
+	//init- when new stuff created, contains all data
+	
+	//update - difference
+	
+	//remove - id
+	
+	//all - socket draw player positions
+    socket.on('newPositions',function(data){
+        ctx.clearRect(0,0,500,500);
+        for(var i = 0 ; i < data.player.length; i++){
+			ctx.fillText(data.player[i].number,data.player[i].x,data.player[i].y);
+			////ctx.fillText('P', Math.random()*500, Math.random()*500);
+		}
+        for(var i = 0 ; i < data.bullet.length; i++){
+			//ctx.fillRect(data.bullet[i].x-5,data.bullet[i].y-5,10,10);
+			////ctx.fillText('P', Math.random()*500, Math.random()*500);
+			ctx.drawImage(Img.bullet, 0,0, Img.bullet.width, Img.bullet.height, data.bullet[i].x-5, data.bullet[i].y-5, 10, 10);
+		}
+    });
+	
+	
+	
+	//pass info to server
 	//socket pass movement key functions info to server
     document.onkeydown = function(event){
         if(event.keyCode === 68)    //d
@@ -123,22 +141,6 @@
 		//var aimAngle = Math.atan2(mouseY,mouseX) / Math.PI * 180;
 		socket.emit('keyPress',{inputId:'mouseangle', mouseX:mouseX, mouseY:mouseY});
 	}
-	
-	//socket draw player positions
-    socket.on('newPositions',function(data){
-        ctx.clearRect(0,0,500,500);
-        for(var i = 0 ; i < data.player.length; i++){
-			ctx.fillText(data.player[i].number,data.player[i].x,data.player[i].y);
-			////ctx.fillText('P', Math.random()*500, Math.random()*500);
-		}
-        for(var i = 0 ; i < data.bullet.length; i++){
-			//ctx.fillRect(data.bullet[i].x-5,data.bullet[i].y-5,10,10);
-			////ctx.fillText('P', Math.random()*500, Math.random()*500);
-			ctx.drawImage(Img.bullet, 0,0, Img.bullet.width, Img.bullet.height, data.bullet[i].x-5, data.bullet[i].y-5, 10, 10);
-		}
-    });
-	
-
 	
 </script>
 

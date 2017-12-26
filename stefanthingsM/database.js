@@ -43,17 +43,18 @@ var USERS = {
 //database functions
 module.exports = {
 	isValidPassword:function(data, callback) {
-		//callback(USERS[data.username] === data.password);
-		callback(fireUsers[data.username] === data.password);
+		callback(USERS[data.username] === data.password);
+		//callback(fireUsers[data.username] === data.password);
 	},
 
 	isUsernameTaken:function(data, callback) {
-		callback(fireUsers[data.username]);
+		callback(USERS[data.username]);
+		//callback(fireUsers[data.username]);
 	},
 
 	addUser:function(data, callback) {
-		//USERS[data.username] = data.password;
-		firebase.database().ref('users/' + data.username).set(data.password);
+		USERS[data.username] = data.password;
+		//firebase.database().ref('users/' + data.username).set(data.password);
 		callback();
 	}
 };

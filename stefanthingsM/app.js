@@ -15,7 +15,7 @@ app.use('/client',express.static(__dirname + '/client'));
 app.use('/', routes);
 
 //port
-app.set('port', (process.env.PORT || 3001)); 
+app.set('port', (process.env.PORT || 9000)); 
 serv.listen(app.get('port'), function(){
 	console.log('listening on port '+app.get('port'));
 });
@@ -529,11 +529,7 @@ io.sockets.on('connection', function(socket){
 	//console.log("socket is " + socket.id);
 	//console.log("socket is " + SOCKET_LIST[socket.id].id);
 	
-	/*/chatting attempt
-	socket.on('chat message', function(msg){
-		console.log('message: ' + msg);
-	});
-	//*/
+
 	
 	Player.onConnect(socket);
     
